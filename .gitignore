@@ -8,39 +8,53 @@ env/
 venv/
 ENV/
 .venv
+*.egg-info/
+dist/
+build/
 
 # Jupyter
 .ipynb_checkpoints
 *.ipynb_checkpoints
 
-# Data
-data/
+# Output directories
+output/
+output_*/
+
+# Video files (comment out if you need to commit examples)
 *.mp4
 *.avi
 *.mov
 *.mkv
-videos/
-output/
+*.gif
 
-# Models
-models/
+# Model weights (not the src/models code)
 *.pth
 *.pt
 *.h5
 *.ckpt
-checkpoints/
+*.safetensors
+*.bin
+
+# HuggingFace cache (if models are downloaded locally)
+.cache/
+huggingface_hub/
 
 # IDE
 .vscode/
 .idea/
 *.swp
 *.swo
+*~
 
 # OS
 .DS_Store
 Thumbs.db
 
-# Logs
+# Logs and experiments
 logs/
 *.log
 runs/
+wandb/
+
+# Claude AI local files
+.claude/

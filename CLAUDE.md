@@ -9,9 +9,9 @@
 - **M1 Optimization**: Using MPS (Metal Performance Shaders) when available
 - **Project Cleaned**: Removed all unused directories and files
 
-### Working Example
+### Working Examples
 
-#### Add Noise to Latent Space (Clean Demo)
+#### 1. Add Noise to Latent Space (Simple Demo)
 ```bash
 python experiments/add_latent_noise.py
 ```
@@ -23,6 +23,24 @@ python experiments/add_latent_noise.py
   - `reconstructed_with_noise.mp4` - VAE reconstruction with noise added to latent space
 - Shows how latent space modifications affect output
 - Uses CPU for stability on M1
+
+#### 2. Process iPhone Videos
+```bash
+python experiments/process_iphone_video.py --video your_video.mp4
+```
+- Handles any resolution (1080p, 4K, vertical videos)
+- Automatically resizes to VAE-compatible dimensions
+- Supports different aspect ratios
+- Options:
+  - `--size 512` - Target resolution (256, 512, 768)
+  - `--frames 16` - Number of frames to process
+  - `--noise 0.3` - Noise level for latent space
+
+#### 3. List Available Models
+```bash
+python experiments/process_iphone_video.py --model list-models
+```
+Shows advanced models you can run locally on M1 Max
 
 ### Project Structure (After Cleanup)
 ```
@@ -144,5 +162,82 @@ jupyter notebook notebooks/autoencoder_tutorial.ipynb
 - Ready for real video experiments with proper models
 - All unused files and directories have been cleaned up
 - Removed `pretrained.py` as it only had placeholder URLs
-- Cleaned experiments folder to contain only one focused demo
+- Cleaned experiments folder to contain focused demos
 - Output folder contains only the essential outputs from the latest run
+
+### iPhone Video Support
+- **Resolution Handling**: Automatically resizes any resolution (1080p, 4K, etc.)
+- **Aspect Ratios**: Handles both landscape and portrait videos
+- **Best Practices**:
+  - Use 512x512 for optimal quality/speed balance
+  - Reduce frame count if memory issues occur
+  - Use CPU mode for very large resolutions
+
+### Advanced Models for M1 Max
+1. **Current (SD VAE)**: Stable, good quality, no temporal consistency
+2. **AnimateDiff**: Better motion handling, ~4-6GB memory
+3. **VideoMAE**: Lightweight, good for understanding, ~4GB memory
+4. **FILM**: Frame interpolation, works with any resolution
+5. **CogVideo**: State-of-art but needs optimization for M1
+
+### NEW: Advanced Video Models (Better Motion & More Frames)
+
+#### Stable Video Diffusion (SVD) - RECOMMENDED
+- **Best for**: Motion quality and temporal consistency
+- **Frames**: 14-25 native, extendable to 100+
+- **Memory**: ~12-16GB (fits well in 32GB)
+- **Install**: Already included with diffusers
+- **Usage**:
+  ```bash
+  # Basic usage
+  python experiments/use_stable_video_diffusion.py --video input.mov
+  
+  # With more motion
+  python experiments/use_stable_video_diffusion.py --video input.mov --motion 200
+  
+  # Extended frames (50+)
+  python experiments/use_stable_video_diffusion.py --video input.mov --extended 50
+  ```
+
+#### Other Notable Models:
+- **I2VGen-XL**: Up to 128 frames! Great for long videos
+- **ModelScope**: 64 frames, good motion
+- **ZeroScope V2**: Efficient, 64 frames
+- **CogVideoX**: State-of-art but needs 20-30GB
+
+#### Model Comparison Script:
+```bash
+# List all advanced models
+python experiments/advanced_video_models.py --list
+```
+
+### AnimateDiff Integration (NEW)
+- **Supported Resolutions**: 256x256, 512x512, 768x768
+- **Supported Frame Counts**: 8, 16, 24, or 32 frames (optimal)
+- **File Format Support**: Now handles .mov files from iPhone!
+- **Temporal Consistency**: Uses AnimateDiff's motion-aware VAE
+
+#### Using AnimateDiff VAE:
+```bash
+# Process with AnimateDiff VAE (motion-aware)
+python experiments/process_iphone_video.py --video your_iphone.mov --model animatediff
+
+# Or use dedicated AnimateDiff script
+python experiments/use_animatediff.py --video your_video.mov
+
+# Generate new videos with AnimateDiff
+python experiments/use_animatediff.py --generate "A spaceship flying through space"
+```
+
+#### Installation:
+```bash
+pip install diffusers[torch] transformers accelerate
+```
+
+#### Key Features:
+- **Real AnimateDiff Model**: Uses guoyww/animatediff-motion-adapter-v1-5-2
+- **Motion-Aware VAE**: Better temporal consistency than SD-VAE
+- **Generation Mode**: Can create new videos from text prompts
+- **Processing Mode**: Can process existing videos with motion awareness
+- **.mov Support**: Handles iPhone videos directly
+- **M1 Optimized**: Works on MPS with fallback to CPU

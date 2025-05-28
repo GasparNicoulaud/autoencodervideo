@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# Setup script for VideoGPT models
+# Since Google Drive has download limits, this script helps with manual setup
+
+CACHE_DIR="$HOME/.cache/videogpt"
+mkdir -p "$CACHE_DIR"
+
+echo "VideoGPT Model Setup"
+echo "===================="
+echo ""
+echo "Due to Google Drive restrictions, you need to manually download the models."
+echo ""
+echo "Step 1: Open one of these links in your browser:"
+echo ""
+echo "1. BAIR (64x64, smallest ~38MB):"
+echo "   https://drive.google.com/file/d/1iIAYJ2Qqrx5Q94s5eIXQYJgAydzvT_8L/view"
+echo ""
+echo "2. Kinetics High Quality (128x128, recommended ~150MB):"
+echo "   https://drive.google.com/file/d/1jvtjjtrtE4cy6pl7DK_zWFEPY3RZt2pB/view"
+echo ""
+echo "Step 2: Click the download button in Google Drive"
+echo ""
+echo "Step 3: After download completes, move the file to the cache directory:"
+echo ""
+echo "For BAIR model:"
+echo "mv ~/Downloads/<downloaded_file> $CACHE_DIR/bair_stride4x2x2"
+echo ""
+echo "For Kinetics model:"
+echo "mv ~/Downloads/<downloaded_file> $CACHE_DIR/kinetics_stride2x4x4"
+echo ""
+echo "Step 4: Verify the file is a valid checkpoint:"
+echo "python -c \"import torch; torch.load('$CACHE_DIR/bair_stride4x2x2')\""
+echo ""
+echo "Current cache directory contents:"
+ls -la "$CACHE_DIR"
